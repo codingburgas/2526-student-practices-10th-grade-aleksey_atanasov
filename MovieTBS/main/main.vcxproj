@@ -135,21 +135,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="booking.h" />
-    <ClInclude Include="cinema.h" />
     <ClInclude Include="hall.h" />
     <ClInclude Include="movie.h" />
     <ClInclude Include="seats.h" />
     <ClInclude Include="show.h" />
-    <ClInclude Include="system.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="booking.cpp" />
-    <ClCompile Include="cinema.cpp" />
     <ClCompile Include="hall.cpp" />
     <ClCompile Include="Seats.cpp" />
     <ClCompile Include="movie.cpp" />
     <ClCompile Include="show.cpp" />
-    <ClCompile Include="system.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

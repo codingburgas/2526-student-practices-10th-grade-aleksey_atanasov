@@ -24,16 +24,10 @@
     <ClInclude Include="booking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cinema.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="hall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="show.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,16 +41,10 @@
     <ClCompile Include="booking.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cinema.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="hall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="show.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
