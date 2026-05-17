@@ -15,36 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="movie.h">
+    <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="seats.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="booking.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="show.h">
+    <ClInclude Include="cinema_service.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="movie.cpp">
+    <ClCompile Include="MovieTBS_BLL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Seats.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="booking.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="show.cpp">
+    <ClCompile Include="cinemas_service.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
