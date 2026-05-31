@@ -135,10 +135,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AuthService.h" />
     <ClInclude Include="cinema_service.h" />
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AuthService.cpp" />
     <ClCompile Include="cinemas_service.cpp" />
     <ClCompile Include="MovieTBS_BLL.cpp" />
   </ItemGroup>

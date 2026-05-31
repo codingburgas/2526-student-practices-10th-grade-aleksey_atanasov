@@ -138,11 +138,15 @@
     <ClInclude Include="cinema.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="system_data.h" />
+    <ClInclude Include="User.h" />
+    <ClInclude Include="UserRepo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cinema.cpp" />
     <ClCompile Include="MovieTBS_DAL.cpp" />
     <ClCompile Include="system_data.cpp" />
+    <ClCompile Include="User.cpp" />
+    <ClCompile Include="UserRepo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

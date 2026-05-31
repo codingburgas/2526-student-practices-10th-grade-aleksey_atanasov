@@ -21,12 +21,18 @@
     <ClInclude Include="cinema_service.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AuthService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MovieTBS_BLL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cinemas_service.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AuthService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
