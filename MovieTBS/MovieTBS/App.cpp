@@ -12,7 +12,7 @@ void App::run()
 
 	SetTargetFPS(60);
 
-	while (!WindowShouldClose)
+	while (!WindowShouldClose())
 	{
 		int width = GetScreenWidth();
 		int height = GetScreenHeight();
