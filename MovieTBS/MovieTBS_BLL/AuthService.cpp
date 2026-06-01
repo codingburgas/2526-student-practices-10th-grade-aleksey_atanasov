@@ -10,11 +10,23 @@ bool AuthService::registerUser(
     const std::string& password
 )
 {
+    if (repository->userExists(username))
+    {
+        return false;
+    }
+
     User user(username, password);
 
     repository->addUser(user);
 
     return true;
+}
+
+bool AuthService::usernameExists(
+    const std::string& username
+)
+{
+    return repository->userExists(username);
 }
 
 bool AuthService::login(

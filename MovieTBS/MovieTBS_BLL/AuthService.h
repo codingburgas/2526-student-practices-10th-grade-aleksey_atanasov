@@ -19,4 +19,7 @@ public:
         const std::string& username,
         const std::string& password
     );
+    bool usernameExists(
+        const std::string& username
+    );
 };

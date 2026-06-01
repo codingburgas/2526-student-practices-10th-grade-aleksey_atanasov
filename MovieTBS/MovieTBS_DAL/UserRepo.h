@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include <vector>
 
 #include "User.h"
@@ -15,4 +13,6 @@ public:
     void addUser(const User& user);
 
     const std::vector<User>& getUsers() const;
+
+    bool userExists(const std::string& username) const;
 };

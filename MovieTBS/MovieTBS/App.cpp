@@ -1,11 +1,33 @@
 #include "App.h"
 
+#include "LoginScreen.h"
+#include "RegisterScreen.h"
+
 App::App()
-    : cinemaService(&data)
+    : cinemaService(&data),
+    authService(&userRepository)
 {
     cinemaService.seedCinemas();
 
     currentScreen = Screen::MainMenu;
+
+    usernameInput = "";
+    passwordInput = "";
+
+    usernameActive = false;
+    passwordActive = false;
+
+    statusMessage = "";
+
+    isLoggedIn = false;
+    currentUser = "";
+
+    usernameBox = { 0,0,0,0 };
+    passwordBox = { 0,0,0,0 };
+
+    loginButton = { 0,0,0,0 };
+    registerButton = { 0,0,0,0 };
+    createAccountButton = { 0,0,0,0 };
 }
 
 void App::run()
@@ -23,56 +45,29 @@ void App::run()
 
         Vector2 mousePosition = GetMousePosition();
 
-        Rectangle loginButton =
+        Rectangle userButton =
         {
-            (float)(width / 2 - 120),
-            200,
-            240,
-            50
+            (float)(width - 60),
+            20,
+            40,
+            40
         };
 
-        Rectangle registerButton =
-        {
-            (float)(width / 2 - 120),
-            280,
-            240,
-            50
-        };
-
-        Rectangle exitButton =
-        {
-            (float)(width / 2 - 120),
-            360,
-            240,
-            50
-        };
-
-        // Navigation
+        // Main Menu -> Login
         if (currentScreen == Screen::MainMenu)
         {
-            if (CheckCollisionPointRec(mousePosition, loginButton) &&
+            if (CheckCollisionPointRec(mousePosition, userButton) &&
                 IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 currentScreen = Screen::Login;
             }
-
-            if (CheckCollisionPointRec(mousePosition, registerButton) &&
-                IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-            {
-                currentScreen = Screen::Register;
-            }
-
-            if (CheckCollisionPointRec(mousePosition, exitButton) &&
-                IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-            {
-                CloseWindow();
-            }
         }
 
-        if (currentScreen != Screen::MainMenu &&
-            IsKeyPressed(KEY_BACKSPACE))
+        // Login -> Register
+        if (currentScreen == Screen::Login &&
+            IsKeyPressed(KEY_R))
         {
-            currentScreen = Screen::MainMenu;
+            currentScreen = Screen::Register;
         }
 
         BeginDrawing();
@@ -86,38 +81,37 @@ void App::run()
             DrawText(
                 "MovieFlow",
                 width / 2 - 100,
-                80,
+                60,
                 40,
                 BLACK
             );
 
-            DrawRectangleRec(loginButton, DARKBLUE);
-
             DrawText(
-                "Login",
-                width / 2 - 35,
-                215,
+                "Welcome to MovieFlow",
+                width / 2 - 120,
+                150,
                 25,
-                WHITE
+                DARKGRAY
             );
 
-            DrawRectangleRec(registerButton, DARKGREEN);
-
             DrawText(
-                "Create Account",
-                width / 2 - 95,
-                295,
-                25,
-                WHITE
+                "Browse movies and book tickets",
+                width / 2 - 170,
+                190,
+                20,
+                GRAY
             );
 
-            DrawRectangleRec(exitButton, MAROON);
+            DrawRectangleRec(
+                userButton,
+                DARKBLUE
+            );
 
             DrawText(
-                "Exit",
-                width / 2 - 25,
-                375,
-                25,
+                "U",
+                width - 48,
+                28,
+                24,
                 WHITE
             );
 
@@ -125,40 +119,22 @@ void App::run()
 
         case Screen::Login:
 
-            DrawText(
-                "LOGIN",
-                width / 2 - 60,
-                100,
-                40,
-                BLACK
-            );
+            loginScreen.update();
 
-            DrawText(
-                "Press BACKSPACE to return",
-                width / 2 - 140,
-                180,
-                20,
-                DARKGRAY
+            loginScreen.draw(
+                width,
+                height
             );
 
             break;
 
         case Screen::Register:
 
-            DrawText(
-                "CREATE ACCOUNT",
-                width / 2 - 170,
-                100,
-                40,
-                BLACK
-            );
+            registerScreen.update();
 
-            DrawText(
-                "Press BACKSPACE to return",
-                width / 2 - 140,
-                180,
-                20,
-                DARKGRAY
+            registerScreen.draw(
+                width,
+                height
             );
 
             break;
