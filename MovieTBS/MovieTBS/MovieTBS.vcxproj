@@ -150,11 +150,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BookingConfirmationScreen.cpp" />
     <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovieDetailsScreen.cpp" />
     <ClCompile Include="MoviesScreen.cpp" />
     <ClCompile Include="RegisterScreen.cpp" />
+    <ClCompile Include="Seat.cpp" />
+    <ClCompile Include="SeatSelectionScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MovieTBS_BLL\MovieTBS_BLL.vcxproj">
@@ -163,10 +166,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="BookingConfirmationScreen.h" />
     <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="MovieDetailsScreen.h" />
     <ClInclude Include="MoviesScreen.h" />
     <ClInclude Include="RegisterScreen.h" />
+    <ClInclude Include="Seat.h" />
+    <ClInclude Include="SeatSelectionScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

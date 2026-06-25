@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <map>
+#include <vector>
 
 #include "raylib.h"
 
@@ -8,6 +10,8 @@
 #include "RegisterScreen.h"
 #include "MoviesScreen.h"
 #include "MovieDetailsScreen.h"
+#include "SeatSelectionScreen.h"
+#include "BookingConfirmationScreen.h"
 
 #include "../MovieTBS_DAL/system_data.h"
 #include "../MovieTBS_DAL/UserRepo.h"
@@ -22,7 +26,9 @@ enum class Screen
     Login,
     Register,
     Movies,
-    MovieDetails
+    MovieDetails,
+    SeatSelection,
+    BookingConfirmation
 };
 
 class App
@@ -40,10 +46,13 @@ private:
     RegisterScreen registerScreen;
     MoviesScreen moviesScreen;
     MovieDetailsScreen movieDetailsScreen;
+    SeatSelectionScreen seatSelectionScreen;
+    BookingConfirmationScreen bookingConfirmationScreen;
 
     Screen currentScreen;
 
     int selectedMovieIndex;
+    std::map<std::string, bool> globalSeatOccupancy;  // Persists across bookings
 
     std::string usernameInput;
     std::string passwordInput;
@@ -68,6 +77,8 @@ private:
     void handleMainMenu();
     void handleMoviesScreen();
     void handleMovieDetailsScreen();
+    void handleSeatSelectionScreen();
+    void handleBookingConfirmationScreen();
 
 public:
     App();

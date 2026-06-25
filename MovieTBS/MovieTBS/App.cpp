@@ -34,6 +34,9 @@ App::App()
 
 	// Initialize movies screen with movies from repository
 	moviesScreen.setMovies(movieRepository.getMovies());
+
+	// Initialize seat selection with global occupancy map
+	seatSelectionScreen.setSeatOccupancy(globalSeatOccupancy);
 }
 
 void App::handleLoginScreen()
@@ -171,10 +174,54 @@ void App::handleMovieDetailsScreen()
 		selectedMovieIndex = -1;
 	}
 
-	// Check if choose seats button is pressed (placeholder for future navigation)
+	// Check if choose seats button is pressed
 	if (movieDetailsScreen.isChooseSeatsButtonPressed())
 	{
-		// TODO: Navigate to seat selection screen in next implementation
+		// Navigate to seat selection screen
+		const Movie* selectedMovie = &movieRepository.getMovies()[selectedMovieIndex];
+		seatSelectionScreen.setMovie(selectedMovie);
+		seatSelectionScreen.setSeatOccupancy(globalSeatOccupancy);
+		currentScreen = Screen::SeatSelection;
+	}
+}
+
+void App::handleSeatSelectionScreen()
+{
+	seatSelectionScreen.update();
+
+	// Check if back button is pressed
+	if (seatSelectionScreen.isBackButtonPressed())
+	{
+		currentScreen = Screen::MovieDetails;
+	}
+
+	// Check if book tickets button is pressed
+	if (seatSelectionScreen.isBookTicketsButtonPressed())
+	{
+		// Get booking information
+		std::vector<std::string> selectedSeats = seatSelectionScreen.getSelectedSeats();
+		double totalPrice = seatSelectionScreen.getTotalPrice();
+		const Movie* selectedMovie = seatSelectionScreen.getSelectedMovie();
+
+		// Mark seats as occupied in global map
+		seatSelectionScreen.markSeatsAsOccupied(selectedSeats);
+		globalSeatOccupancy = seatSelectionScreen.getSeatOccupancy();
+
+		// Prepare confirmation screen
+		bookingConfirmationScreen.setBookingInfo(selectedMovie, selectedSeats, totalPrice);
+		currentScreen = Screen::BookingConfirmation;
+	}
+}
+
+void App::handleBookingConfirmationScreen()
+{
+	bookingConfirmationScreen.update();
+
+	// Check if back to movies button is pressed
+	if (bookingConfirmationScreen.isBackToMoviesButtonPressed())
+	{
+		currentScreen = Screen::Movies;
+		selectedMovieIndex = -1;
 	}
 }
 
@@ -233,6 +280,14 @@ void App::run()
 		else if (currentScreen == Screen::MovieDetails)
 		{
 			handleMovieDetailsScreen();
+		}
+		else if (currentScreen == Screen::SeatSelection)
+		{
+			handleSeatSelectionScreen();
+		}
+		else if (currentScreen == Screen::BookingConfirmation)
+		{
+			handleBookingConfirmationScreen();
 		}
 
 		BeginDrawing();
@@ -339,6 +394,26 @@ void App::run()
 		case Screen::MovieDetails:
 
 			movieDetailsScreen.draw(
+				width,
+				height,
+				currentUser
+			);
+
+			break;
+
+		case Screen::SeatSelection:
+
+			seatSelectionScreen.draw(
+				width,
+				height,
+				currentUser
+			);
+
+			break;
+
+		case Screen::BookingConfirmation:
+
+			bookingConfirmationScreen.draw(
 				width,
 				height,
 				currentUser
