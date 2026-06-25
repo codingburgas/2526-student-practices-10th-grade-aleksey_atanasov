@@ -10,6 +10,8 @@ private:
 	int duration;  // in minutes
 	double rating; // 1-10
 	int posterColor; // Raylib color code
+	std::string description;
+	int releaseYear;
 
 public:
 	Movie();
@@ -19,7 +21,9 @@ public:
 		const std::string& genre,
 		int duration,
 		double rating,
-		int posterColor
+		int posterColor,
+		const std::string& description,
+		int releaseYear
 	);
 
 	std::string getTitle() const;
@@ -27,4 +31,6 @@ public:
 	int getDuration() const;
 	double getRating() const;
 	int getPosterColor() const;
+	std::string getDescription() const;
+	int getReleaseYear() const;
 };

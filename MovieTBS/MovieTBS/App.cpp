@@ -30,6 +30,8 @@ App::App()
 	registerButton = { 0, 0, 0, 0 };
 	createAccountButton = { 0, 0, 0, 0 };
 
+	selectedMovieIndex = -1;
+
 	// Initialize movies screen with movies from repository
 	moviesScreen.setMovies(movieRepository.getMovies());
 }
@@ -145,13 +147,34 @@ void App::handleMoviesScreen()
 		isLoggedIn = false;
 		currentUser = "";
 		currentScreen = Screen::MainMenu;
+		selectedMovieIndex = -1;
 	}
 
-	// Check if view details is pressed (placeholder for now)
+	// Check if view details is pressed
 	int hoveredMovie = moviesScreen.getHoveredMovieIndex();
 	if (hoveredMovie >= 0 && moviesScreen.isViewDetailsPressed(hoveredMovie))
 	{
-		// TODO: Open movie details screen
+		selectedMovieIndex = hoveredMovie;
+		movieDetailsScreen.setMovie(&movieRepository.getMovies()[selectedMovieIndex]);
+		currentScreen = Screen::MovieDetails;
+	}
+}
+
+void App::handleMovieDetailsScreen()
+{
+	movieDetailsScreen.update();
+
+	// Check if back button is pressed
+	if (movieDetailsScreen.isBackButtonPressed())
+	{
+		currentScreen = Screen::Movies;
+		selectedMovieIndex = -1;
+	}
+
+	// Check if choose seats button is pressed (placeholder for future navigation)
+	if (movieDetailsScreen.isChooseSeatsButtonPressed())
+	{
+		// TODO: Navigate to seat selection screen in next implementation
 	}
 }
 
@@ -206,6 +229,10 @@ void App::run()
 		else if (currentScreen == Screen::Movies)
 		{
 			handleMoviesScreen();
+		}
+		else if (currentScreen == Screen::MovieDetails)
+		{
+			handleMovieDetailsScreen();
 		}
 
 		BeginDrawing();
@@ -302,6 +329,16 @@ void App::run()
 		case Screen::Movies:
 
 			moviesScreen.draw(
+				width,
+				height,
+				currentUser
+			);
+
+			break;
+
+		case Screen::MovieDetails:
+
+			movieDetailsScreen.draw(
 				width,
 				height,
 				currentUser

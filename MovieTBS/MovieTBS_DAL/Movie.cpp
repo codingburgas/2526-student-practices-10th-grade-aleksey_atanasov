@@ -7,6 +7,8 @@ Movie::Movie()
 	duration = 0;
 	rating = 0.0;
 	posterColor = 0;
+	description = "";
+	releaseYear = 0;
 }
 
 Movie::Movie(
@@ -14,7 +16,9 @@ Movie::Movie(
 	const std::string& genre,
 	int duration,
 	double rating,
-	int posterColor
+	int posterColor,
+	const std::string& description,
+	int releaseYear
 )
 {
 	this->title = title;
@@ -22,6 +26,8 @@ Movie::Movie(
 	this->duration = duration;
 	this->rating = rating;
 	this->posterColor = posterColor;
+	this->description = description;
+	this->releaseYear = releaseYear;
 }
 
 std::string Movie::getTitle() const
@@ -47,4 +53,14 @@ double Movie::getRating() const
 int Movie::getPosterColor() const
 {
 	return posterColor;
+}
+
+std::string Movie::getDescription() const
+{
+	return description;
+}
+
+int Movie::getReleaseYear() const
+{
+	return releaseYear;
 }

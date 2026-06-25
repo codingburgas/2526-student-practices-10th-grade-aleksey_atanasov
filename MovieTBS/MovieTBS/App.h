@@ -7,6 +7,7 @@
 #include "LoginScreen.h"
 #include "RegisterScreen.h"
 #include "MoviesScreen.h"
+#include "MovieDetailsScreen.h"
 
 #include "../MovieTBS_DAL/system_data.h"
 #include "../MovieTBS_DAL/UserRepo.h"
@@ -20,7 +21,8 @@ enum class Screen
     MainMenu,
     Login,
     Register,
-    Movies
+    Movies,
+    MovieDetails
 };
 
 class App
@@ -37,8 +39,11 @@ private:
     LoginScreen loginScreen;
     RegisterScreen registerScreen;
     MoviesScreen moviesScreen;
+    MovieDetailsScreen movieDetailsScreen;
 
     Screen currentScreen;
+
+    int selectedMovieIndex;
 
     std::string usernameInput;
     std::string passwordInput;
@@ -62,6 +67,7 @@ private:
     void handleRegisterScreen();
     void handleMainMenu();
     void handleMoviesScreen();
+    void handleMovieDetailsScreen();
 
 public:
     App();
