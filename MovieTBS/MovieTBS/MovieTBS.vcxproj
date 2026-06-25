@@ -152,6 +152,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MoviesScreen.cpp" />
     <ClCompile Include="RegisterScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="LoginScreen.h" />
+    <ClInclude Include="MoviesScreen.h" />
     <ClInclude Include="RegisterScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

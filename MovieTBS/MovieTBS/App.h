@@ -6,9 +6,11 @@
 
 #include "LoginScreen.h"
 #include "RegisterScreen.h"
+#include "MoviesScreen.h"
 
 #include "../MovieTBS_DAL/system_data.h"
 #include "../MovieTBS_DAL/UserRepo.h"
+#include "../MovieTBS_DAL/MovieRepository.h"
 
 #include "../MovieTBS_BLL/cinema_service.h"
 #include "../MovieTBS_BLL/AuthService.h"
@@ -17,7 +19,8 @@ enum class Screen
 {
     MainMenu,
     Login,
-    Register
+    Register,
+    Movies
 };
 
 class App
@@ -29,8 +32,11 @@ private:
     UserRepository userRepository;
     AuthService authService;
 
+    MovieRepository movieRepository;
+
     LoginScreen loginScreen;
     RegisterScreen registerScreen;
+    MoviesScreen moviesScreen;
 
     Screen currentScreen;
 
@@ -55,6 +61,7 @@ private:
     void handleLoginScreen();
     void handleRegisterScreen();
     void handleMainMenu();
+    void handleMoviesScreen();
 
 public:
     App();

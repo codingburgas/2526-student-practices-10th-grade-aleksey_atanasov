@@ -2,6 +2,7 @@
 
 #include "LoginScreen.h"
 #include "RegisterScreen.h"
+#include "MoviesScreen.h"
 
 App::App()
 	: cinemaService(&data),
@@ -9,7 +10,7 @@ App::App()
 {
 	cinemaService.seedCinemas();
 
-	currentScreen = Screen::MainMenu;
+	currentScreen = Screen::Login;
 
 	usernameInput = "";
 	passwordInput = "";
@@ -28,6 +29,9 @@ App::App()
 	loginButton = { 0, 0, 0, 0 };
 	registerButton = { 0, 0, 0, 0 };
 	createAccountButton = { 0, 0, 0, 0 };
+
+	// Initialize movies screen with movies from repository
+	moviesScreen.setMovies(movieRepository.getMovies());
 }
 
 void App::handleLoginScreen()
@@ -54,7 +58,7 @@ void App::handleLoginScreen()
 			isLoggedIn = true;
 			currentUser = username;
 			loginScreen.clearInputs();
-			currentScreen = Screen::MainMenu;
+			currentScreen = Screen::Movies;
 		}
 		else
 		{
@@ -131,6 +135,26 @@ void App::handleRegisterScreen()
 	}
 }
 
+void App::handleMoviesScreen()
+{
+	moviesScreen.update();
+
+	// Check if logout button is pressed
+	if (moviesScreen.isLogoutButtonPressed())
+	{
+		isLoggedIn = false;
+		currentUser = "";
+		currentScreen = Screen::MainMenu;
+	}
+
+	// Check if view details is pressed (placeholder for now)
+	int hoveredMovie = moviesScreen.getHoveredMovieIndex();
+	if (hoveredMovie >= 0 && moviesScreen.isViewDetailsPressed(hoveredMovie))
+	{
+		// TODO: Open movie details screen
+	}
+}
+
 void App::handleMainMenu()
 {
 	Vector2 mousePosition = GetMousePosition();
@@ -155,7 +179,7 @@ void App::handleMainMenu()
 
 void App::run()
 {
-	InitWindow(900, 600, "MovieFlow");
+	InitWindow(900, 600, "MovieTBS");
 
 	SetTargetFPS(60);
 
@@ -178,6 +202,10 @@ void App::run()
 		else if (currentScreen == Screen::Register)
 		{
 			handleRegisterScreen();
+		}
+		else if (currentScreen == Screen::Movies)
+		{
+			handleMoviesScreen();
 		}
 
 		BeginDrawing();
@@ -267,6 +295,16 @@ void App::run()
 			registerScreen.draw(
 				width,
 				height
+			);
+
+			break;
+
+		case Screen::Movies:
+
+			moviesScreen.draw(
+				width,
+				height,
+				currentUser
 			);
 
 			break;
