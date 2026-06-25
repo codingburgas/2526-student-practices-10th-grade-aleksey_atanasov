@@ -269,6 +269,38 @@ void RegisterScreen::draw(
         WHITE
     );
 
+    // BACK button - Top left
+    backButton = { 30, 20, 100, 40 };
+
+    if (CheckCollisionPointRec(mousePosition, backButton))
+    {
+        DrawRectangle(
+            30,
+            20,
+            100,
+            40,
+            DARKGRAY
+        );
+    }
+    else
+    {
+        DrawRectangle(
+            30,
+            20,
+            100,
+            40,
+            GRAY
+        );
+    }
+
+    DrawText(
+        "BACK",
+        55,
+        30,
+        18,
+        WHITE
+    );
+
     // Status message
     if (showStatusMessage)
     {

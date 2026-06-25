@@ -112,17 +112,9 @@ void App::handleRegisterScreen()
 			registerScreen.setStatusMessage("Account created successfully!");
 			registerScreen.clearInputs();
 
-			// Return to login screen after 2 seconds
-			// Using a simple delay with frame counting
-			static int successFrames = 0;
-			successFrames++;
-
-			if (successFrames > 120)  // ~2 seconds at 60 FPS
-			{
-				successFrames = 0;
-				registerScreen.resetButtonStates();
-				currentScreen = Screen::Login;
-			}
+			// Return to login screen immediately
+			registerScreen.resetButtonStates();
+			currentScreen = Screen::Login;
 		}
 		else
 		{
@@ -143,31 +135,26 @@ void App::handleMainMenu()
 {
 	Vector2 mousePosition = GetMousePosition();
 
-	Rectangle userButton =
+	Rectangle loginButton =
 	{
-		(float)(GetScreenWidth() - 130),
+		(float)(GetScreenWidth() - 150),
 		20,
-		110,
+		140,
 		40
 	};
 
 	// Main Menu -> Login
-	if (CheckCollisionPointRec(mousePosition, userButton) &&
+	if (CheckCollisionPointRec(mousePosition, loginButton) &&
 		IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 	{
-		if (!isLoggedIn)
-		{
-			loginScreen.clearInputs();
-			loginScreen.resetButtonStates();
-			currentScreen = Screen::Login;
-		}
+		loginScreen.clearInputs();
+		loginScreen.resetButtonStates();
+		currentScreen = Screen::Login;
 	}
 }
 
 void App::run()
 {
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-
 	InitWindow(900, 600, "MovieFlow");
 
 	SetTargetFPS(60);
@@ -178,14 +165,6 @@ void App::run()
 		int height = GetScreenHeight();
 
 		Vector2 mousePosition = GetMousePosition();
-
-		Rectangle userButton =
-		{
-			(float)(width - 60),
-			20,
-			40,
-			40
-		};
 
 		// Handle screen transitions
 		if (currentScreen == Screen::MainMenu)
@@ -204,6 +183,15 @@ void App::run()
 		BeginDrawing();
 
 		ClearBackground(BEIGE);
+
+		// LOGIN button rectangle - used in MainMenu
+		Rectangle loginButton =
+		{
+			(float)(width - 150),
+			20,
+			140,
+			40
+		};
 
 		switch (currentScreen)
 		{
@@ -233,18 +221,23 @@ void App::run()
 				GRAY
 			);
 
-			DrawRectangleRec(
-				userButton,
-				DARKBLUE
-			);
+			// LOGIN button text - Top right
+			Vector2 mousePos = GetMousePosition();
+
+			Color loginTextColor = DARKBLUE;
+			if (CheckCollisionPointRec(mousePos, loginButton))
+			{
+				loginTextColor = BLUE;
+			}
 
 			DrawText(
 				"LOGIN",
-				width - 122,
-				31,
-				18,
-				WHITE
+				width - 140,
+				28,
+				24,
+				loginTextColor
 			);
+
 
 			if (isLoggedIn)
 			{
