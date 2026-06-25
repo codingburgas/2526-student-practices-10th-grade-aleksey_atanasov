@@ -13,6 +13,13 @@ private:
     bool usernameActive;
     bool passwordActive;
 
+    std::string statusMessage;
+    double statusMessageTime;
+    bool showStatusMessage;
+
+    Rectangle createAccountButton;
+    Rectangle backButton;
+
 public:
     RegisterScreen();
 
@@ -24,4 +31,11 @@ public:
     std::string getPassword() const;
 
     void clearInputs();
+
+    void setStatusMessage(const std::string& message);
+
+    bool isCreateAccountButtonPressed() const;
+    bool isBackButtonPressed() const;
+
+    void resetButtonStates();
 };

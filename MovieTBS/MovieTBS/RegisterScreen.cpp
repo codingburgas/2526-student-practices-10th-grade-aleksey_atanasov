@@ -7,6 +7,13 @@ RegisterScreen::RegisterScreen()
 
     usernameActive = false;
     passwordActive = false;
+
+    statusMessage = "";
+    statusMessageTime = 0.0;
+    showStatusMessage = false;
+
+    createAccountButton = { 0, 0, 0, 0 };
+    backButton = { 0, 0, 0, 0 };
 }
 
 void RegisterScreen::update()
@@ -74,6 +81,18 @@ void RegisterScreen::update()
             password.pop_back();
         }
     }
+
+    // Status message management
+    if (showStatusMessage)
+    {
+        statusMessageTime += GetFrameTime();
+        if (statusMessageTime > 3.0)
+        {
+            showStatusMessage = false;
+            statusMessage = "";
+            statusMessageTime = 0.0;
+        }
+    }
 }
 
 void RegisterScreen::draw(
@@ -97,11 +116,28 @@ void RegisterScreen::draw(
         BLACK
     );
 
+    if (usernameActive)
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 180, 300, 40 },
+            3,
+            BLUE
+        );
+    }
+    else
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 180, 300, 40 },
+            1,
+            GRAY
+        );
+    }
+
     DrawRectangle(
-        width / 2 - 150,
-        180,
-        300,
-        40,
+        width / 2 - 149,
+        181,
+        298,
+        38,
         WHITE
     );
 
@@ -113,6 +149,26 @@ void RegisterScreen::draw(
         BLACK
     );
 
+    if (usernameActive)
+    {
+        if ((GetTime() * 2) - (int)(GetTime() * 2) < 0.5)
+        {
+            int textWidth =
+                MeasureText(
+                    username.c_str(),
+                    20
+                );
+
+            DrawText(
+                "|",
+                width / 2 - 140 + textWidth,
+                190,
+                20,
+                BLACK
+            );
+        }
+    }
+
     DrawText(
         "Password",
         width / 2 - 150,
@@ -121,11 +177,28 @@ void RegisterScreen::draw(
         BLACK
     );
 
+    if (passwordActive)
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 260, 300, 40 },
+            3,
+            BLUE
+        );
+    }
+    else
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 260, 300, 40 },
+            1,
+            GRAY
+        );
+    }
+
     DrawRectangle(
-        width / 2 - 150,
-        260,
-        300,
-        40,
+        width / 2 - 149,
+        261,
+        298,
+        38,
         WHITE
     );
 
@@ -142,13 +215,51 @@ void RegisterScreen::draw(
         BLACK
     );
 
-    DrawRectangle(
-        width / 2 - 100,
-        340,
-        200,
-        50,
-        DARKGREEN
-    );
+    if (passwordActive)
+    {
+        if ((GetTime() * 2) - (int)(GetTime() * 2) < 0.5)
+        {
+            int textWidth =
+                MeasureText(
+                    hiddenPassword.c_str(),
+                    20
+                );
+
+            DrawText(
+                "|",
+                width / 2 - 140 + textWidth,
+                270,
+                20,
+                BLACK
+            );
+        }
+    }
+
+    // CREATE ACCOUNT button
+    createAccountButton = { (float)(width / 2 - 100), 340, 200, 50 };
+
+    Vector2 mousePosition = GetMousePosition();
+
+    if (CheckCollisionPointRec(mousePosition, createAccountButton))
+    {
+        DrawRectangle(
+            width / 2 - 100,
+            340,
+            200,
+            50,
+            DARKGREEN
+        );
+    }
+    else
+    {
+        DrawRectangle(
+            width / 2 - 100,
+            340,
+            200,
+            50,
+            GREEN
+        );
+    }
 
     DrawText(
         "CREATE ACCOUNT",
@@ -157,6 +268,31 @@ void RegisterScreen::draw(
         20,
         WHITE
     );
+
+    // Status message
+    if (showStatusMessage)
+    {
+        Color messageColor = BLACK;
+
+        if (statusMessage.find("successful") != std::string::npos ||
+            statusMessage.find("successfully") != std::string::npos)
+        {
+            messageColor = DARKGREEN;
+        }
+        else if (statusMessage.find("exists") != std::string::npos ||
+                 statusMessage.find("empty") != std::string::npos)
+        {
+            messageColor = RED;
+        }
+
+        DrawText(
+            statusMessage.c_str(),
+            width / 2 - MeasureText(statusMessage.c_str(), 18) / 2,
+            420,
+            18,
+            messageColor
+        );
+    }
 }
 
 std::string RegisterScreen::getUsername() const
@@ -173,4 +309,34 @@ void RegisterScreen::clearInputs()
 {
     username.clear();
     password.clear();
+}
+
+void RegisterScreen::setStatusMessage(const std::string& message)
+{
+    statusMessage = message;
+    showStatusMessage = true;
+    statusMessageTime = 0.0;
+}
+
+bool RegisterScreen::isCreateAccountButtonPressed() const
+{
+    Vector2 mousePosition = GetMousePosition();
+
+    return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+           CheckCollisionPointRec(mousePosition, createAccountButton);
+}
+
+bool RegisterScreen::isBackButtonPressed() const
+{
+    Vector2 mousePosition = GetMousePosition();
+
+    return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+           CheckCollisionPointRec(mousePosition, backButton);
+}
+
+void RegisterScreen::resetButtonStates()
+{
+    showStatusMessage = false;
+    statusMessage = "";
+    statusMessageTime = 0.0;
 }

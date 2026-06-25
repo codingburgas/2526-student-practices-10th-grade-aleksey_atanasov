@@ -15,6 +15,12 @@ private:
 
     Rectangle loginButton;
     Rectangle registerButton;
+    Rectangle backButton;
+
+    std::string statusMessage;
+    double statusMessageTime;
+    bool showStatusMessage;
+
 public:
     LoginScreen();
 
@@ -26,4 +32,12 @@ public:
     std::string getPassword() const;
 
     void clearInputs();
+
+    void setStatusMessage(const std::string& message);
+
+    bool isLoginButtonPressed() const;
+    bool isRegisterButtonPressed() const;
+    bool isBackButtonPressed() const;
+
+    void resetButtonStates();
 };

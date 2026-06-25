@@ -7,6 +7,14 @@ LoginScreen::LoginScreen()
 
     usernameActive = false;
     passwordActive = false;
+
+    statusMessage = "";
+    statusMessageTime = 0.0;
+    showStatusMessage = false;
+
+    loginButton = { 0, 0, 0, 0 };
+    registerButton = { 0, 0, 0, 0 };
+    backButton = { 0, 0, 0, 0 };
 }
 
 void LoginScreen::update()
@@ -75,6 +83,18 @@ void LoginScreen::update()
             password.pop_back();
         }
     }
+
+    // Управление на статус съобщенията
+    if (showStatusMessage)
+    {
+        statusMessageTime += GetFrameTime();
+        if (statusMessageTime > 3.0)
+        {
+            showStatusMessage = false;
+            statusMessage = "";
+            statusMessageTime = 0.0;
+        }
+    }
 }
 
 void LoginScreen::draw(
@@ -99,29 +119,29 @@ void LoginScreen::draw(
     );
 
     if (usernameActive)
-{
-    DrawRectangleLinesEx(
-        { (float)(width / 2 - 150),180,300,40 },
-        3,
-        BLUE
-    );
-}
-else
-{
-    DrawRectangleLinesEx(
-        { (float)(width / 2 - 150),180,300,40 },
-        1,
-        GRAY
-    );
-}
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 180, 300, 40 },
+            3,
+            BLUE
+        );
+    }
+    else
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 180, 300, 40 },
+            1,
+            GRAY
+        );
+    }
 
-DrawRectangle(
-    width / 2 - 149,
-    181,
-    298,
-    38,
-    WHITE
-);
+    DrawRectangle(
+        width / 2 - 149,
+        181,
+        298,
+        38,
+        WHITE
+    );
 
     DrawText(
         username.c_str(),
@@ -159,11 +179,28 @@ DrawRectangle(
         BLACK
     );
 
+    if (passwordActive)
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 260, 300, 40 },
+            3,
+            BLUE
+        );
+    }
+    else
+    {
+        DrawRectangleLinesEx(
+            { (float)(width / 2 - 150), 260, 300, 40 },
+            1,
+            GRAY
+        );
+    }
+
     DrawRectangle(
-        width / 2 - 150,
-        260,
-        300,
-        40,
+        width / 2 - 149,
+        261,
+        298,
+        38,
         WHITE
     );
 
@@ -200,21 +237,129 @@ DrawRectangle(
         }
     }
 
-    DrawRectangle(
-        width / 2 - 75,
-        340,
-        150,
-        50,
-        DARKBLUE
-    );
+    // LOGIN button - Left side
+    loginButton = { (float)(width / 2 - 160), 340, 120, 50 };
+
+    Vector2 mousePosition = GetMousePosition();
+
+    if (CheckCollisionPointRec(mousePosition, loginButton))
+    {
+        DrawRectangle(
+            width / 2 - 160,
+            340,
+            120,
+            50,
+            DARKBLUE
+        );
+    }
+    else
+    {
+        DrawRectangle(
+            width / 2 - 160,
+            340,
+            120,
+            50,
+            BLUE
+        );
+    }
 
     DrawText(
         "LOGIN",
-        width / 2 - 40,
+        width / 2 - 145,
         355,
-        25,
+        20,
         WHITE
     );
+
+    // REGISTER button - Right side
+    registerButton = { (float)(width / 2 + 40), 340, 120, 50 };
+
+    if (CheckCollisionPointRec(mousePosition, registerButton))
+    {
+        DrawRectangle(
+            width / 2 + 40,
+            340,
+            120,
+            50,
+            DARKGREEN
+        );
+    }
+    else
+    {
+        DrawRectangle(
+            width / 2 + 40,
+            340,
+            120,
+            50,
+            GREEN
+        );
+    }
+
+    DrawText(
+        "REGISTER",
+        width / 2 + 50,
+        355,
+        20,
+        WHITE
+    );
+
+    // BACK button - Top left
+    backButton = { 30, 20, 100, 40 };
+
+    if (CheckCollisionPointRec(mousePosition, backButton))
+    {
+        DrawRectangle(
+            30,
+            20,
+            100,
+            40,
+            DARKGRAY
+        );
+    }
+    else
+    {
+        DrawRectangle(
+            30,
+            20,
+            100,
+            40,
+            GRAY
+        );
+    }
+
+    DrawText(
+        "BACK",
+        55,
+        30,
+        18,
+        WHITE
+    );
+
+    // Status message
+    if (showStatusMessage)
+    {
+        Color messageColor = BLACK;
+
+        if (statusMessage.find("successful") != std::string::npos ||
+            statusMessage.find("successfully") != std::string::npos)
+        {
+            messageColor = DARKGREEN;
+        }
+        else if (statusMessage.find("not found") != std::string::npos ||
+                 statusMessage.find("Incorrect") != std::string::npos ||
+                 statusMessage.find("empty") != std::string::npos)
+        {
+            messageColor = RED;
+        }
+
+        DrawText(
+            statusMessage.c_str(),
+            width / 2 - MeasureText(statusMessage.c_str(), 18) / 2,
+            420,
+            18,
+            messageColor
+        );
+    }
 }
 
 std::string LoginScreen::getUsername() const
@@ -231,4 +376,42 @@ void LoginScreen::clearInputs()
 {
     username.clear();
     password.clear();
+}
+
+void LoginScreen::setStatusMessage(const std::string& message)
+{
+    statusMessage = message;
+    showStatusMessage = true;
+    statusMessageTime = 0.0;
+}
+
+bool LoginScreen::isLoginButtonPressed() const
+{
+    Vector2 mousePosition = GetMousePosition();
+
+    return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+           CheckCollisionPointRec(mousePosition, loginButton);
+}
+
+bool LoginScreen::isRegisterButtonPressed() const
+{
+    Vector2 mousePosition = GetMousePosition();
+
+    return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+           CheckCollisionPointRec(mousePosition, registerButton);
+}
+
+bool LoginScreen::isBackButtonPressed() const
+{
+    Vector2 mousePosition = GetMousePosition();
+
+    return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+           CheckCollisionPointRec(mousePosition, backButton);
+}
+
+void LoginScreen::resetButtonStates()
+{
+    showStatusMessage = false;
+    statusMessage = "";
+    statusMessageTime = 0.0;
 }

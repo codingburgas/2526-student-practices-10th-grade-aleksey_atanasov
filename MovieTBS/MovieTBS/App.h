@@ -52,6 +52,10 @@ private:
     Rectangle registerButton;
     Rectangle createAccountButton;
 
+    void handleLoginScreen();
+    void handleRegisterScreen();
+    void handleMainMenu();
+
 public:
     App();
 
