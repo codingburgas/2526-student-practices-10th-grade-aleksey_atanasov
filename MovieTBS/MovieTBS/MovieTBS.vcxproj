@@ -155,6 +155,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovieDetailsScreen.cpp" />
     <ClCompile Include="MoviesScreen.cpp" />
+    <ClCompile Include="MyTicketsScreen.cpp" />
     <ClCompile Include="RegisterScreen.cpp" />
     <ClCompile Include="Seat.cpp" />
     <ClCompile Include="SeatSelectionScreen.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="MovieDetailsScreen.h" />
     <ClInclude Include="MoviesScreen.h" />
+    <ClInclude Include="MyTicketsScreen.h" />
     <ClInclude Include="RegisterScreen.h" />
     <ClInclude Include="Seat.h" />
     <ClInclude Include="SeatSelectionScreen.h" />

@@ -49,22 +49,40 @@ void MoviesScreen::draw(int width, int height, const std::string& username)
 		BLACK
 	);
 
-	// Draw user info and logout button
+	// Draw user info and navigation buttons
 	std::string userText = "User: " + username;
 	int userTextWidth = MeasureText(userText.c_str(), 18);
 
 	DrawText(
 		userText.c_str(),
-		width - userTextWidth - 140,
+		width - userTextWidth - 300,
 		25,
 		18,
 		DARKBLUE
 	);
 
-	// Logout button
+	// My Tickets button (shown when logged in)
+	myTicketsButton = { (float)(width - 260), 20, 120, 40 };
 	logoutButton = { (float)(width - 130), 20, 120, 40 };
 
 	Vector2 mousePos = GetMousePosition();
+
+	if (CheckCollisionPointRec(mousePos, myTicketsButton))
+	{
+		DrawRectangleRec(myTicketsButton, DARKBLUE);
+	}
+	else
+	{
+		DrawRectangleRec(myTicketsButton, BLUE);
+	}
+
+	DrawText(
+		"MY TICKETS",
+		width - 240,
+		31,
+		18,
+		WHITE
+	);
 
 	if (CheckCollisionPointRec(mousePos, logoutButton))
 	{
@@ -221,4 +239,11 @@ bool MoviesScreen::isViewDetailsPressed(int movieIndex) const
 int MoviesScreen::getHoveredMovieIndex() const
 {
 	return hoveredMovieIndex;
+}
+
+bool MoviesScreen::isMyTicketsPressed() const
+{
+	Vector2 mousePos = GetMousePosition();
+	return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+		   CheckCollisionPointRec(mousePos, myTicketsButton);
 }

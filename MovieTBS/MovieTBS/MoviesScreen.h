@@ -10,6 +10,7 @@ private:
 	std::vector<Movie> movies;
 
 	Rectangle logoutButton;
+	Rectangle myTicketsButton;
 
 	int hoveredMovieIndex;
 	int hoveredButtonIndex;
@@ -26,6 +27,8 @@ public:
 	bool isLogoutButtonPressed() const;
 
 	bool isViewDetailsPressed(int movieIndex) const;
+
+	bool isMyTicketsPressed() const;
 
 	int getHoveredMovieIndex() const;
 };

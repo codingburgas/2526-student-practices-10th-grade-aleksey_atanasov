@@ -12,10 +12,12 @@
 #include "MovieDetailsScreen.h"
 #include "SeatSelectionScreen.h"
 #include "BookingConfirmationScreen.h"
+#include "MyTicketsScreen.h"
 
 #include "../MovieTBS_DAL/system_data.h"
 #include "../MovieTBS_DAL/UserRepo.h"
 #include "../MovieTBS_DAL/MovieRepository.h"
+#include "../MovieTBS_DAL/BookingRepository.h"
 
 #include "../MovieTBS_BLL/cinema_service.h"
 #include "../MovieTBS_BLL/AuthService.h"
@@ -27,6 +29,7 @@ enum class Screen
     Register,
     Movies,
     MovieDetails,
+    MyTickets,
     SeatSelection,
     BookingConfirmation
 };
@@ -48,11 +51,15 @@ private:
     MovieDetailsScreen movieDetailsScreen;
     SeatSelectionScreen seatSelectionScreen;
     BookingConfirmationScreen bookingConfirmationScreen;
+    MyTicketsScreen myTicketsScreen;
 
     Screen currentScreen;
 
     int selectedMovieIndex;
     std::map<std::string, bool> globalSeatOccupancy;  // Persists across bookings
+
+    // Bookings repository (DAL)
+    BookingRepository bookingRepository;
 
     std::string usernameInput;
     std::string passwordInput;
@@ -79,6 +86,7 @@ private:
     void handleMovieDetailsScreen();
     void handleSeatSelectionScreen();
     void handleBookingConfirmationScreen();
+    void handleMyTicketsScreen();
 
 public:
     App();

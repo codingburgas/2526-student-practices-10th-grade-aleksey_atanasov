@@ -4,6 +4,10 @@
 #include "RegisterScreen.h"
 #include "MoviesScreen.h"
 
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+
 App::App()
 	: cinemaService(&data),
 	authService(&userRepository)
@@ -161,6 +165,15 @@ void App::handleMoviesScreen()
 		movieDetailsScreen.setMovie(&movieRepository.getMovies()[selectedMovieIndex]);
 		currentScreen = Screen::MovieDetails;
 	}
+
+	// Check if My Tickets button is pressed (only when logged in)
+	if (!currentUser.empty() && moviesScreen.isMyTicketsPressed())
+	{
+		// Prepare tickets for current user and navigate
+		myTicketsScreen.setBookings(bookingRepository.getBookingsForUser(currentUser));
+		currentScreen = Screen::MyTickets;
+	}
+
 }
 
 void App::handleMovieDetailsScreen()
@@ -207,6 +220,22 @@ void App::handleSeatSelectionScreen()
 		seatSelectionScreen.markSeatsAsOccupied(selectedSeats);
 		globalSeatOccupancy = seatSelectionScreen.getSeatOccupancy();
 
+		// Create booking record and store in repository
+		// Format current date/time
+		time_t now = time(nullptr);
+		struct tm localTime;
+#ifdef _WIN32
+		localtime_s(&localTime, &now);
+#else
+		localtime_r(&now, &localTime);
+#endif
+		char dateBuf[64];
+		strftime(dateBuf, sizeof(dateBuf), "%Y-%m-%d %H:%M:%S", &localTime);
+		std::string dateStr(dateBuf);
+
+		Booking newBooking(0, currentUser, selectedMovie->getTitle(), selectedSeats, dateStr, totalPrice);
+		int assignedId = bookingRepository.addBooking(newBooking);
+
 		// Prepare confirmation screen
 		bookingConfirmationScreen.setBookingInfo(selectedMovie, selectedSeats, totalPrice);
 		currentScreen = Screen::BookingConfirmation;
@@ -224,6 +253,51 @@ void App::handleBookingConfirmationScreen()
 		selectedMovieIndex = -1;
 	}
 }
+
+void App::handleMyTicketsScreen()
+{
+	myTicketsScreen.update();
+
+	// Back to Movies
+	if (myTicketsScreen.isBackButtonPressed())
+	{
+		currentScreen = Screen::Movies;
+		selectedMovieIndex = -1;
+	}
+
+	// Handle pending cancellation confirmation
+	int pending = myTicketsScreen.getPendingCancelBookingIndex();
+	if (pending >= 0)
+	{
+		if (myTicketsScreen.isConfirmYesPressed())
+		{
+			int bookingId = myTicketsScreen.getBookingIdAt(pending);
+			Booking removed;
+			if (bookingRepository.removeBookingById(bookingId, removed))
+			{
+				// Free seats in global occupancy
+				auto seats = removed.getSeats();
+				for (const auto& s : seats)
+				{
+					globalSeatOccupancy[s] = false;
+				}
+
+				// Update seat selection occupancy
+				seatSelectionScreen.setSeatOccupancy(globalSeatOccupancy);
+
+				// Refresh tickets list for current user
+				myTicketsScreen.setBookings(bookingRepository.getBookingsForUser(currentUser));
+			}
+
+			myTicketsScreen.clearPendingCancel();
+		}
+		else if (myTicketsScreen.isConfirmNoPressed())
+		{
+			myTicketsScreen.clearPendingCancel();
+		}
+	}
+}
+
 
 void App::handleMainMenu()
 {
@@ -411,15 +485,25 @@ void App::run()
 
 			break;
 
-		case Screen::BookingConfirmation:
+		case Screen::MyTickets:
 
-			bookingConfirmationScreen.draw(
-				width,
-				height,
-				currentUser
-			);
+				myTicketsScreen.draw(
+					width,
+					height,
+					currentUser
+				);
 
-			break;
+				break;
+
+			case Screen::BookingConfirmation:
+
+				bookingConfirmationScreen.draw(
+					width,
+					height,
+					currentUser
+				);
+
+				break;
 		}
 
 		EndDrawing();

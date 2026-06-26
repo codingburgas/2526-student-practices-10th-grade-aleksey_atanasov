@@ -135,6 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Booking.h" />
+    <ClInclude Include="BookingRepository.h" />
     <ClInclude Include="cinema.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Movie.h" />
@@ -144,6 +146,8 @@
     <ClInclude Include="UserRepo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Booking.cpp" />
+    <ClCompile Include="BookingRepository.cpp" />
     <ClCompile Include="cinema.cpp" />
     <ClCompile Include="Movie.cpp" />
     <ClCompile Include="MovieRepository.cpp" />
