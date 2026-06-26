@@ -224,11 +224,11 @@ void App::handleSeatSelectionScreen()
 		// Format current date/time
 		time_t now = time(nullptr);
 		struct tm localTime;
-#ifdef _WIN32
+	#ifdef _WIN32
 		localtime_s(&localTime, &now);
-#else
+	#else
 		localtime_r(&now, &localTime);
-#endif
+	#endif
 		char dateBuf[64];
 		strftime(dateBuf, sizeof(dateBuf), "%Y-%m-%d %H:%M:%S", &localTime);
 		std::string dateStr(dateBuf);
@@ -239,6 +239,10 @@ void App::handleSeatSelectionScreen()
 		// Prepare confirmation screen
 		bookingConfirmationScreen.setBookingInfo(selectedMovie, selectedSeats, totalPrice);
 		currentScreen = Screen::BookingConfirmation;
+
+		// Set transient status message
+		statusMessage = "Booking confirmed!";
+		statusTimer = 3.0f; // show for 3 seconds
 	}
 }
 
@@ -362,6 +366,10 @@ void App::run()
 		else if (currentScreen == Screen::BookingConfirmation)
 		{
 			handleBookingConfirmationScreen();
+		}
+		else if (currentScreen == Screen::MyTickets)
+		{
+			handleMyTicketsScreen();
 		}
 
 		BeginDrawing();
@@ -487,23 +495,32 @@ void App::run()
 
 		case Screen::MyTickets:
 
-				myTicketsScreen.draw(
-					width,
-					height,
-					currentUser
-				);
+			myTicketsScreen.draw(
+				width,
+				height,
+				currentUser
+			);
 
-				break;
+			break;
 
-			case Screen::BookingConfirmation:
+		case Screen::BookingConfirmation:
 
-				bookingConfirmationScreen.draw(
-					width,
-					height,
-					currentUser
-				);
+			bookingConfirmationScreen.draw(
+				width,
+				height,
+				currentUser
+			);
 
-				break;
+			break;
+		}
+
+		// Draw transient status message if any
+		if (statusTimer > 0.0f && !statusMessage.empty())
+		{
+			int msgW = MeasureText(statusMessage.c_str(), 18);
+			DrawRectangle((width - msgW - 40) / 2, 10, msgW + 40, 36, LIGHTGRAY);
+			DrawText(statusMessage.c_str(), (width - msgW) / 2, 16, 18, BLACK);
+			statusTimer -= GetFrameTime();
 		}
 
 		EndDrawing();

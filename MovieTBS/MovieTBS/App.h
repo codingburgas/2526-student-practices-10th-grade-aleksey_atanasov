@@ -68,6 +68,7 @@ private:
     bool passwordActive;
 
     std::string statusMessage;
+    float statusTimer; // seconds remaining for status message
 
     bool isLoggedIn;
     std::string currentUser;
